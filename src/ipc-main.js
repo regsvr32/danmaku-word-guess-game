@@ -40,6 +40,8 @@ export function regisiterApi() {
       
       publicWindow = new BrowserWindow({
         ...settings.publicWindowBounds,
+        alwaysOnTop: true,
+        minimizable: false,
         //parent: mainWindow,
         webPreferences: {
           nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
