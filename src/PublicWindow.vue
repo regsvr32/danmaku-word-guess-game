@@ -165,7 +165,7 @@ function onDanmakuMessage(uid, uname, msg, sc) {
     window.electron[nowTurn.value >= turn ? 'stopGame' : 'nextWord']()
     let message = `正确答案【${word}】，${uname}猜对了！`
     if (sc) { message += '甚至是SC！' }
-    messageBanner.value.setMessage(message, true)
+    messageBanner.value.setMessage(message, true, 1000)
     return
   }
   if (msg == lastWrongWord) { return }

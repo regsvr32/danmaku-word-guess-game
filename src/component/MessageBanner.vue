@@ -8,7 +8,7 @@
 .message-slide-enter-active
   transition: transform 0.2s ease
 .message-slide-leave-active
-  transition: opacity 0.2s cubic-bezier(1, 0, 1, 0)
+  transition: opacity 0.5s cubic-bezier(1, 0, 1, 0)
 .message-slide-enter-from
   transform: translateY(100%)
 .message-slide-leave-to
@@ -51,21 +51,23 @@ const lastMessage = ref(null)
 
 let isBannerBusy = false
 function activeNext() {
-  lastMessage.value = messageQueue.dequeue()
-  if (lastMessage.value == null) {
+  const next = messageQueue.dequeue()
+  if (next == null) {
+    lastMessage.value = null
     isBannerBusy = false
     return
   }
+  lastMessage.value = next.message
   isBannerBusy = true
   setTimeout(() => {
     lastMessage.value = null
     nextTick(activeNext)
-  }, 500)
+  }, next.stay)
 }
 
 defineExpose({
-  setMessage(message, immediate = false) {
-    messageQueue.enqueue(message, immediate)
+  setMessage(message, immediate = false, stay = 500) {
+    messageQueue.enqueue({ message, stay }, immediate)
     if (!isBannerBusy) { activeNext() }
   }
 })

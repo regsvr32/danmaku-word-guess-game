@@ -47,7 +47,7 @@
 
 <script setup>
 import { reactive, ref, inject, watch, toRaw, onUnmounted } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 import { RandomWordPicker } from '../util/RandomWordPicker'
 import Icon from '../asset/Icon.vue'
 
@@ -95,22 +95,31 @@ watch([isPlaying, currentWord, () => config.style], ([play, word, style]) => {
 }, { deep: true })
 
 const cancelWatchPublicWindowClose = window.electron.watchEvent('public-window-closed', stopPlay)
+
 const cancelWatchStopGame = window.electron.watchEvent('stop-game', reason => {
+  if (reason) {
     stopPlay()
-    ElMessage[reason ? 'error' : 'success']({
-      message: reason || '游戏结束',
-      duration: 1500,
-      showClose: true
-    })
+    ElMessage.error({ message: reason, duration: 1500, showClose: true })
+  }
+  else {
+    const waiting = ElLoading.service({ text: '请稍等...' })
+    setTimeout(() => {
+      stopPlay()
+      ElMessage.success({ message: '游戏结束', duration: 1500, showClose: true })
+      waiting.close()
+    }, 1000)
+  }
 })
+
 const cancelWatchNextWord = window.electron.watchEvent('next-word', () => {
-  refreshWord()
-  ElMessage.success({
-    message: '待猜词语更新了！',
-    duration: 1500,
-    showClose: true
-  })
+    const waiting = ElLoading.service({ text: '请稍等...' })
+    setTimeout(() => {
+      refreshWord()
+      ElMessage.success({ message: '待猜词语更新了！', duration: 1500, showClose: true })
+      waiting.close()
+    }, 1000)
 })
+
 onUnmounted(() => {
   cancelWatchPublicWindowClose()
   cancelWatchStopGame()
