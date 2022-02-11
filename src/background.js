@@ -5,7 +5,7 @@ import { existsSync, readFile, writeFile } from 'fs'
 import { promisify } from 'util'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import { join } from 'path'
-import { regisiterApi } from './ipc-main'
+import { regisiterApi, closePublicWindow } from './ipc-main'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 regisiterApi()
@@ -40,6 +40,7 @@ async function createWindow() {
 
   win.on('close', () => {
     if (win.webContents.isDevToolsOpened()) { win.webContents.closeDevTools() }
+    closePublicWindow()
   })
 
   const webRequest = win.webContents.session.webRequest

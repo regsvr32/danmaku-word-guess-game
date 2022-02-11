@@ -40,7 +40,7 @@ export function regisiterApi() {
       
       publicWindow = new BrowserWindow({
         ...settings.publicWindowBounds,
-        parent: mainWindow,
+        //parent: mainWindow,
         webPreferences: {
           nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
           contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
@@ -89,4 +89,8 @@ export function regisiterApi() {
   ipcMain.on('next-word', () => {
     BrowserWindow.fromId(process.env.MAIN_WINDOW_ID * 1).webContents.send('next-word')
   })
+}
+
+export function closePublicWindow() {
+  if (publicWindow != null) { publicWindow.close() }
 }
