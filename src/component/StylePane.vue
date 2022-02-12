@@ -11,7 +11,7 @@
           <span>猜词CD</span>
         </template>
         <el-checkbox v-model="style.guessCdEnabled" label="启用" />&emsp;
-        <el-input-number style="width: 80px" v-model="style.guessCdSeconds" :min="1" :max="99" :precision="0" size="small" />&nbsp;秒
+        <el-input-number style="width: 80px" v-model="style.guessCdSeconds" :disabled="!style.guessCdEnabled" :min="1" :max="99" :precision="0" size="small" />&nbsp;秒
       </el-form-item>
       <el-form-item>
         <template #label>
