@@ -3,7 +3,7 @@
     <template v-if="viewData.ready">
       <div class="header">
         <template v-if="viewData.play">
-          <div class="turn">{{nowTurn + 1}}/{{viewData.turn}}</div>
+          <div class="turn">{{Math.min(nowTurn + 1, viewData.turn)}}/{{viewData.turn}}</div>
           <div class="hint">
             <span class="length-hint" v-if="viewData.style.showLengthHint">{{viewData.word.length}}个字</span>
             <span class="category-hint" v-if="viewData.style.showCategoryHint">{{viewData.category}}</span>
