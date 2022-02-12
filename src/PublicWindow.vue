@@ -150,9 +150,19 @@ const messageBanner = ref(null)
 
 let lastWrongWord = null
 let waitForRefresh = false
+let userLastGuess = {}
+
 function onDanmakuMessage(uid, uname, msg, sc) {
-  const { turn, play, word } = viewData.value
+  const { turn, play, word, style: { guessCdEnabled, guessCdSeconds } } = viewData.value
   if (!play || waitForRefresh) { return }
+  if (!sc && guessCdEnabled) {
+    const now = new Date()
+    if (userLastGuess[uid] && now - userLastGuess[uid] < guessCdSeconds * 1000) {
+      messageBanner.value.setMessage(`${uname}，您猜得太快了`)
+      return
+    }
+    userLastGuess[uid] = now
+  }
   if (msg.startsWith(word) && /^[吧吗哈嘛呢啊啦…；？！，。;?!,.]*$/.test(msg.substring(word.length))) {
     if (bingos.value[uid]) {
       bingos.value[uid].times += 1
@@ -188,6 +198,7 @@ watch(() => viewData.value.play, play => {
 watch(() => viewData.value.startTime, () => {
   lastWrongWord = null
   waitForRefresh = false
+  userLastGuess = {}
   if (messageBanner.value) {
     messageBanner.value.setMessage('待猜词语更新了！', true)
   }

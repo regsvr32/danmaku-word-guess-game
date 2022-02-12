@@ -46,7 +46,9 @@ const defaultStyleConfig = {
   windowBackground: '#4c4c4c',
   mainFont: '',
   showLengthHint: true,
-  showCategoryHint: true
+  showCategoryHint: true,
+  guessCdEnabled: true,
+  guessCdSeconds: 5
 }
 
 function initTextStyles(name, bold, color, size, strokeColor) {
