@@ -11,7 +11,8 @@ let publicWindow = null
 export function regisiterApi() {
   ipcMain.handle('select-fastest', (_, host_list) => {
     return Promise.any(host_list.map(async host => {
-      await ping.promise.probe(host.host)
+      const { alive } = await ping.promise.probe(host.host)
+      if (!alive) { throw new Error('host not alive') }
       return host
     }))
   })

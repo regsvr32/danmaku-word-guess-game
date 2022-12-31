@@ -224,7 +224,7 @@ watch(() => viewData.value.roomId, async roomId => {
   }
   session.addEventListener('normal-message', ({ data }) => {
     logger.debug(data)
-    switch (data.cmd) {
+    switch (data.cmd && data.cmd.split(':')[0]) {
       case 'DANMU_MSG': {
         const [ , msg, [uid, uname]] = data.info
         onDanmakuMessage(uid, uname, msg, false)
